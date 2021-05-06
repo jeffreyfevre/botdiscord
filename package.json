@@ -18,6 +18,8 @@
   "homepage": "https://github.com/jeffreyfevre/botdiscord#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "discord.js": "^12.5.3"
+    "cheerio": "^1.0.0-rc.6",
+    "discord.js": "^12.5.3",
+    "dotenv": "^9.0.0"
   }
 }
