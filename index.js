@@ -43,22 +43,6 @@ client.login(config.BOT_TOKEN).then(() => {
   console.log("Bot connecté !");
 });
 
-function validateEDTLink(leftOperand, rightOperand, operator = "==") {
-  switch (operator) {
-    case ">":
-      return leftOperand > rightOperand;
-    case ">=":
-      return leftOperand >= rightOperand;
-    case "<=":
-      return leftOperand <= rightOperand;
-    case "<":
-      return leftOperand <= rightOperand;
-    case "==":
-    default:
-      return leftOperand == rightOperand;
-  }
-}
-
 /**
  *
  * @param {number} retryCount
@@ -69,10 +53,12 @@ async function fetchLink(retryCount = 0, maxCount = 5) {
   const { link, count } = await getEDTLink();
 
   const date = new Date();
+  date.setHours(0, 0, 0, 0);
   const url = new URL(link);
-  const linkDate = Date.parse(url.searchParams.get("date"));
+  const linkDate = new Date(url.searchParams.get("date"));
+  linkDate.setHours(0, 0, 0, 0);
 
-  if ((validateEDTLink(link, linkDate, date), ">=")) {
+  if (linkDate >= date) {
     return `${count} liens trouvées. :construction_worker:\r\nLien : ${link}`;
   } else {
     if (retryCount < maxCount) {
