@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/jeffreyfevre/botdiscord.git"
   },
-  "author": "jeffrey fevre",
+  "author": "jeffrey fevre et Amine Birani",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jeffreyfevre/botdiscord/issues"
@@ -21,6 +21,7 @@
     "cheerio": "^1.0.0-rc.6",
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "node-cron": "^3.0.0"
   }
 }

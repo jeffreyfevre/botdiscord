@@ -10,6 +10,9 @@ const client = new Discord.Client();
 const axios = require("axios");
 const cheerio = require("cheerio");
 const moment = require("moment");
+var cron = require('node-cron');
+
+console.log(JSON.stringify(client));
 
 const edtApiBaseURL = new URL(
   "https://edtmobiliteng.wigorservices.net//WebPsDyn.aspx"
@@ -34,6 +37,29 @@ client.on("ready", () =>
   console.log(`Logged in as 
   ${client.user.tag}`)
 );
+
+let edtSave;
+
+cron.schedule('* * * * *', async () => {
+  console.log('running every minute 1, 2, 4 and 5');
+
+
+  let date = new Date();
+  let heure = date.getHours();
+  let min = date.getMinutes();
+  let edtResponse;
+  if (heure == "8"&& min == "16" || heure == "13" && min == "16")
+  {
+    edtResponse = await fetchLink();
+  }
+
+  if (edtResponse != edtSave)
+  {
+    const channel = client.channels.cache.get("828897751844257795");
+      channel.send(edtResponse);
+  }
+
+});
 
 client.on("message", async function (message) {
   const prefix = config.PREFIX;
@@ -99,8 +125,14 @@ client.on("message", async function (message) {
   }
 });
 
-client.login(config.BOT_TOKEN);
-
+client.login(config.BOT_TOKEN).then(() => {
+  console.log("Bot connecté !");
+});
+client.on('ready', () => {
+  console.log(client.channels);
+  client.channels.fetch("828897751844257795")
+});
+console.log(JSON.stringify(client.channels))
 /**
  * @param {string} edtLink
  * @param {boolean} verbose
@@ -150,12 +182,9 @@ async function getEDTLink(edtLink) {
   const edtApiResponse = await axios.get(edtLink);
   const edtBody = edtApiResponse.data;
   const $ = cheerio.load(edtBody);
-
   const allLinks = $("div.Teams a:first-child");
-
+  console.log(allLinks);
   const link = allLinks.last().attr("href");
-
   console.log(`link found : `, link);
-
   return { link, count: allLinks.length };
 }
